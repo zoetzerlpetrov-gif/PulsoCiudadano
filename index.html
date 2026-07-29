@@ -8,20 +8,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0f10;
-  --panel:#12181a;
-  --line:#1f2a2d;
-  --txt:#d7e4e2;
-  --txt-hi:#eafff4;
-  --mute:#7d9490;
-  --good:#39d98a;
-  --warn:#ffb648;
-  --bad:#ff5c5c;
-  --mx:#2fb8a6;
-  --us:#5c8bff;
-  --eu:#c99bff;
-  --mono:'JetBrains Mono',monospace;
-  --disp:'Oxanium',sans-serif;
+--bg:#0b0f10;
+--panel:#12181a;
+--line:#1f2a2d;
+--txt:#d7e4e2;
+--txt-hi:#eafff4;
+--mute:#7d9490;
+--good:#39d98a;
+--warn:#ffb648;
+--bad:#ff5c5c;
+--mx:#2fb8a6;
+--us:#5c8bff;
+--eu:#c99bff;
+--mono:'JetBrains Mono',monospace;
+--disp:'Oxanium',sans-serif;
 }
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--mono);}
@@ -37,6 +37,7 @@ header p{margin:0;color:var(--mute);font-size:13px;max-width:900px;line-height:1
 .flagdot{width:10px;height:10px;border-radius:50%;display:inline-block;}
 .mx .flagdot{background:var(--mx);} .us .flagdot{background:var(--us);} .eu .flagdot{background:var(--eu);}
 .subhead{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;margin:14px 0 8px;border-top:1px dashed var(--line);padding-top:10px;}
+.subhead.first{border-top:none;padding-top:0;margin-top:0;}
 .card{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:12px;background:#0e1315;}
 .card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
 .card .label{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;}
@@ -88,9 +89,14 @@ a{color:var(--us);}
 </div>
 
 <div class="sectores">
-<h2>SECTORES DE CONSUMO (EE.UU.)</h2>
-<p class="hint">Ventas al menudeo por giro comercial, para comparar contra los indicadores macro y detectar posibles correlaciones (por ejemplo, si el comercio electronico crece mientras las tiendas departamentales caen).</p>
-<div class="sector-grid" id="cards-SECTORS"></div>
+<h2>SECTORES DE CONSUMO</h2>
+<p class="hint">Ventas o ingresos por giro comercial en cada region, para comparar contra los indicadores macro y detectar posibles correlaciones (por ejemplo, si el comercio electronico crece mientras las tiendas departamentales caen).</p>
+<div class="subhead first">MEXICO &middot; INEGI (EMEC, indice 2013=100)</div>
+<div class="sector-grid" id="cards-SECTORS-MX"></div>
+<div class="subhead">ESTADOS UNIDOS &middot; Census (millones USD)</div>
+<div class="sector-grid" id="cards-SECTORS-US"></div>
+<div class="subhead">UNION EUROPEA &middot; Eurostat (% var. mensual)</div>
+<div class="sector-grid" id="cards-SECTORS-EU"></div>
 </div>
 
 <div class="senales">
@@ -110,168 +116,172 @@ a{color:var(--us);}
 <script>
 (function(){
 var CONFIG = {
-  'unemployment': {dir:'down_is_good'},
-  'retail_sales_real': {dir:'up_is_good'},
-  'retail_trade_growth': {dir:'up_is_good'},
-  'retail_trade_change': {dir:'up_is_good'},
-  'consumer_sentiment': {dir:'up_is_good'},
-  'consumer_confidence': {dir:'up_is_good'},
-  'cpi': {dir:'neutral'},
-  'remittances': {dir:'up_is_good'},
-  'informal_employment': {dir:'down_is_good'},
-  'savings_rate': {dir:'up_is_good'},
-  'debt_service_ratio': {dir:'down_is_good'},
-  'credit_delinquency': {dir:'down_is_good'},
-  'business_applications': {dir:'up_is_good'},
-  'major_purchases_intent': {dir:'up_is_good'},
-  'savings_intent': {dir:'neutral'}
+'unemployment': {dir:'down_is_good'},
+'retail_sales_real': {dir:'up_is_good'},
+'retail_trade_growth': {dir:'up_is_good'},
+'retail_trade_change': {dir:'up_is_good'},
+'consumer_sentiment': {dir:'up_is_good'},
+'consumer_confidence': {dir:'up_is_good'},
+'cpi': {dir:'neutral'},
+'remittances': {dir:'up_is_good'},
+'informal_employment': {dir:'down_is_good'},
+'savings_rate': {dir:'up_is_good'},
+'debt_service_ratio': {dir:'down_is_good'},
+'credit_delinquency': {dir:'down_is_good'},
+'business_applications': {dir:'up_is_good'},
+'major_purchases_intent': {dir:'up_is_good'},
+'savings_intent': {dir:'neutral'}
 };
 
 function fmtNum(v){
-  if(v===null||v===undefined||isNaN(v)) return '--';
-  if(Math.abs(v)>=1000) return v.toLocaleString('es-MX',{maximumFractionDigits:0});
-  return v.toLocaleString('es-MX',{maximumFractionDigits:2});
+if(v===null||v===undefined||isNaN(v)) return '--';
+if(Math.abs(v)>=1000) return v.toLocaleString('es-MX',{maximumFractionDigits:0});
+return v.toLocaleString('es-MX',{maximumFractionDigits:2});
 }
 
 function drawSpark(canvas, points, color){
-  if(!points || points.length<2) return;
-  var ctx = canvas.getContext('2d');
-  var w = canvas.width = canvas.clientWidth * 2;
-  var h = canvas.height = canvas.clientHeight * 2;
-  ctx.clearRect(0,0,w,h);
-  var vals = points.map(function(p){return p.value;});
-  var min = Math.min.apply(null, vals);
-  var max = Math.max.apply(null, vals);
-  var range = (max-min) || 1;
-  var stepX = w / (points.length-1);
-  ctx.beginPath();
-  points.forEach(function(p, i){
-    var x = i*stepX;
-    var y = h - ((p.value-min)/range) * (h*0.85) - h*0.075;
-    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-  });
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 3;
-  ctx.stroke();
+if(!points || points.length<2) return;
+var ctx = canvas.getContext('2d');
+var w = canvas.width = canvas.clientWidth * 2;
+var h = canvas.height = canvas.clientHeight * 2;
+ctx.clearRect(0,0,w,h);
+var vals = points.map(function(p){return p.value;});
+var min = Math.min.apply(null, vals);
+var max = Math.max.apply(null, vals);
+var range = (max-min) || 1;
+var stepX = w / (points.length-1);
+ctx.beginPath();
+points.forEach(function(p, i){
+var x = i*stepX;
+var y = h - ((p.value-min)/range) * (h*0.85) - h*0.075;
+if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+});
+ctx.strokeStyle = color;
+ctx.lineWidth = 3;
+ctx.stroke();
 }
 
 function semClass(key, delta){
-  var cfg = CONFIG[key] || {dir:'neutral'};
-  if(delta===null||delta===undefined||isNaN(delta)||delta===0) return 'sem-warn';
-  if(cfg.dir==='up_is_good') return delta>0 ? 'sem-good':'sem-bad';
-  if(cfg.dir==='down_is_good') return delta>0 ? 'sem-bad':'sem-good';
-  return 'sem-warn';
+var cfg = CONFIG[key] || {dir:'neutral'};
+if(delta===null||delta===undefined||isNaN(delta)||delta===0) return 'sem-warn';
+if(cfg.dir==='up_is_good') return delta>0 ? 'sem-good':'sem-bad';
+if(cfg.dir==='down_is_good') return delta>0 ? 'sem-bad':'sem-good';
+return 'sem-warn';
 }
 
 function buildCard(key, s, accent){
-  var pts = s.points || [];
-  var last = pts[pts.length-1];
-  var prev = pts[pts.length-2];
-  var lastVal = last ? last.value : null;
-  var delta = (last && prev) ? (last.value - prev.value) : null;
-  var deltaClass = 'flat';
-  if(delta>0) deltaClass='up'; else if(delta<0) deltaClass='down';
-  var deltaSign = (delta===null||delta===undefined||isNaN(delta)) ? '--' : ((delta>0?'+':'') + delta.toLocaleString('es-MX',{maximumFractionDigits:2}));
-  var card = document.createElement('div');
-  card.className = 'card';
-  var semC = semClass(key, delta);
-  card.innerHTML =
-    '<div class="top">' +
-      '<div><span class="semaforo ' + semC + '"></span><span class="label">' + s.label + '</span><br>' +
-      '<span class="value">' + fmtNum(lastVal) + '</span><span class="unit">' + (s.unit||'') + '</span></div>' +
-      '<div class="delta ' + deltaClass + '">' + deltaSign + '</div>' +
-    '</div>' +
-    '<canvas class="spark"></canvas>' +
-    '<div class="meta"><span>' + (s.source||'') + '</span><span>' + (last? last.date : '--') + '</span></div>' +
-    (s.error ? '<div class="meta" style="color:#ff5c5c">Sin datos disponibles ('+s.error+')</div>' : '');
-  var canvas = card.querySelector('canvas');
-  setTimeout(function(){ drawSpark(canvas, pts, accent); }, 0);
-  return card;
+var pts = s.points || [];
+var last = pts[pts.length-1];
+var prev = pts[pts.length-2];
+var lastVal = last ? last.value : null;
+var delta = (last && prev) ? (last.value - prev.value) : null;
+var deltaClass = 'flat';
+if(delta>0) deltaClass='up'; else if(delta<0) deltaClass='down';
+var deltaSign = (delta===null||delta===undefined||isNaN(delta)) ? '--' : ((delta>0?'+':'') + delta.toLocaleString('es-MX',{maximumFractionDigits:2}));
+var card = document.createElement('div');
+card.className = 'card';
+var semC = semClass(key, delta);
+card.innerHTML =
+'<div class="top">' +
+'<div><span class="semaforo ' + semC + '"></span><span class="label">' + s.label + '</span><br>' +
+'<span class="value">' + fmtNum(lastVal) + '</span><span class="unit">' + (s.unit||'') + '</span></div>' +
+'<div class="delta ' + deltaClass + '">' + deltaSign + '</div>' +
+'</div>' +
+'<canvas class="spark"></canvas>' +
+'<div class="meta"><span>' + (s.source||'') + '</span><span>' + (last? last.date : '--') + '</span></div>' +
+(s.error ? '<div class="meta" style="color:#ff5c5c">Sin datos disponibles ('+s.error+')</div>' : '');
+var canvas = card.querySelector('canvas');
+setTimeout(function(){ drawSpark(canvas, pts, accent); }, 0);
+return card;
 }
 
 function render(data){
-  var order = {
-    MX: ['unemployment','retail_trade_growth','consumer_confidence','cpi','remittances','informal_employment'],
-    US: ['unemployment','retail_sales_real','consumer_sentiment','cpi','savings_rate','debt_service_ratio','credit_delinquency','business_applications'],
-    EU: ['unemployment','retail_trade_change','consumer_confidence','major_purchases_intent','savings_intent'],
-    US_SECTORS: ['grocery','restaurants','general_merchandise','ecommerce','clothing','ecommerce_share']
-  };
-  var accents = {MX:'#2fb8a6', US:'#5c8bff', EU:'#c99bff', US_SECTORS:'#ffb648'};
+var order = {
+MX: ['unemployment','retail_trade_growth','consumer_confidence','cpi','remittances','informal_employment'],
+US: ['unemployment','retail_sales_real','consumer_sentiment','cpi','savings_rate','debt_service_ratio','credit_delinquency','business_applications'],
+EU: ['unemployment','retail_trade_change','consumer_confidence','major_purchases_intent','savings_intent'],
+US_SECTORS: ['grocery','restaurants','general_merchandise','ecommerce','clothing','ecommerce_share'],
+MX_SECTORS: ['grocery','self_service','department_stores','clothing','furniture','fuel'],
+EU_SECTORS: ['food','fuel','household_equipment','ict','other_goods','culture_recreation']
+};
+var accents = {MX:'#2fb8a6', US:'#5c8bff', EU:'#c99bff', US_SECTORS:'#ffb648', MX_SECTORS:'#2fb8a6', EU_SECTORS:'#c99bff'};
 
-  ['MX','US','EU'].forEach(function(country){
-    var container = document.getElementById('cards-'+country);
-    if(!container) return;
-    container.innerHTML = '';
-    var series = (data.series && data.series[country]) || {};
-    (order[country]).forEach(function(key){
-      var s = series[key];
-      if(!s) return;
-      container.appendChild(buildCard(key, s, accents[country]));
-    });
-  });
+['MX','US','EU'].forEach(function(country){
+var container = document.getElementById('cards-'+country);
+if(!container) return;
+container.innerHTML = '';
+var series = (data.series && data.series[country]) || {};
+(order[country]).forEach(function(key){
+var s = series[key];
+if(!s) return;
+container.appendChild(buildCard(key, s, accents[country]));
+});
+});
 
-  var sectorContainer = document.getElementById('cards-SECTORS');
-  if(sectorContainer){
-    sectorContainer.innerHTML = '';
-    var sectorSeries = (data.series && data.series.US_SECTORS) || {};
-    order.US_SECTORS.forEach(function(key){
-      var s = sectorSeries[key];
-      if(!s) return;
-      sectorContainer.appendChild(buildCard(key, s, accents.US_SECTORS));
-    });
-  }
+var sectorGroups = {MX_SECTORS:'cards-SECTORS-MX', US_SECTORS:'cards-SECTORS-US', EU_SECTORS:'cards-SECTORS-EU'};
+Object.keys(sectorGroups).forEach(function(group){
+var container = document.getElementById(sectorGroups[group]);
+if(!container) return;
+container.innerHTML = '';
+var series = (data.series && data.series[group]) || {};
+(order[group]||[]).forEach(function(key){
+var s = series[key];
+if(!s) return;
+container.appendChild(buildCard(key, s, accents[group]));
+});
+});
 
-  var foot = document.getElementById('foot');
-  var gen = data.generated_at ? new Date(data.generated_at).toLocaleString('es-MX') : '--';
-  foot.innerHTML =
-    '<p><b>Metodologia:</b> los indicadores provienen de fuentes publicas oficiales: FRED (Banco de la Reserva Federal de San Luis, que agrega BLS, Census, Universidad de Michigan y OCDE), Eurostat (Comision Europea), Banxico (Sistema de Informacion Economica) e INEGI (Banco de Indicadores, ENOE). Son indicadores MACRO usados como proxy del comportamiento economico ciudadano (consumo, empleo, confianza, ahorro, remesas, informalidad); no miden directamente cierres de comercios, inseguridad o cobro de piso, ya que no existe una fuente publica abierta con esos datos en tiempo real.</p>' +
-    '<p><b>Ultima actualizacion del panel:</b> ' + gen + '</p>';
+var foot = document.getElementById('foot');
+var gen = data.generated_at ? new Date(data.generated_at).toLocaleString('es-MX') : '--';
+foot.innerHTML =
+'<p><b>Metodologia:</b> los indicadores provienen de fuentes publicas oficiales: FRED (Banco de la Reserva Federal de San Luis, que agrega BLS, Census, Universidad de Michigan y OCDE), Eurostat (Comision Europea), Banxico (Sistema de Informacion Economica) e INEGI (Banco de Indicadores, ENOE, EMEC). Son indicadores MACRO usados como proxy del comportamiento economico ciudadano (consumo, empleo, confianza, ahorro, remesas, informalidad, ventas por sector); no miden directamente cierres de comercios, inseguridad o cobro de piso, ya que no existe una fuente publica abierta con esos datos en tiempo real.</p>' +
+'<p><b>Ultima actualizacion del panel:</b> ' + gen + '</p>';
 
-  renderNews(data.news_signals || []);
+renderNews(data.news_signals || []);
 }
 
 function renderNews(list){
-  var box = document.getElementById('news-list');
-  if(!box) return;
-  if(!list.length){ box.innerHTML = '<p class="empty">Sin datos de GDELT en esta actualizacion.</p>'; return; }
-  box.innerHTML = '';
-  list.forEach(function(item){
-    var div = document.createElement('div');
-    div.className = 'news-card';
-    var status = item.available && item.points && item.points.length
-      ? (item.points.length + ' puntos, ultimo ' + item.points[item.points.length-1].date)
-      : 'Sin datos disponibles en esta corrida (posible limite de tasa del servicio).';
-    div.innerHTML = '<div class="nlabel">' + item.label + ' &middot; ' + item.country + '</div>' +
-      '<div class="nstatus">' + status + '</div>';
-    box.appendChild(div);
-  });
+var box = document.getElementById('news-list');
+if(!box) return;
+if(!list.length){ box.innerHTML = '<p class="empty">Sin datos de GDELT en esta actualizacion.</p>'; return; }
+box.innerHTML = '';
+list.forEach(function(item){
+var div = document.createElement('div');
+div.className = 'news-card';
+var status = item.available && item.points && item.points.length
+? (item.points.length + ' puntos, ultimo ' + item.points[item.points.length-1].date)
+: 'Sin datos disponibles en esta corrida (posible limite de tasa del servicio).';
+div.innerHTML = '<div class="nlabel">' + item.label + ' &middot; ' + item.country + '</div>' +
+'<div class="nstatus">' + status + '</div>';
+box.appendChild(div);
+});
 }
 
 function loadSenales(){
-  fetch('data/senales.json?_=' + Date.now())
-    .then(function(r){ return r.ok ? r.json() : []; })
-    .then(function(list){
-      var box = document.getElementById('senales-list');
-      if(!list || !list.length){ box.innerHTML = '<p class="empty">Aun no hay senales cargadas. Este apartado se alimenta manualmente en data/senales.json (no se hace scraping automatico de noticias).</p>'; return; }
-      box.innerHTML = '';
-      list.slice().reverse().forEach(function(item){
-        var div = document.createElement('div');
-        div.className = 'senal-item';
-        div.innerHTML = '<div class="sdate">' + (item.date||'') + ' &middot; ' + (item.country||'') + ' &middot; ' + (item.category||'') + '</div>' +
-          '<div>' + (item.title||'') + '</div>' +
-          (item.source ? '<div><a href="'+item.source+'" target="_blank" rel="noopener">fuente</a></div>' : '');
-        box.appendChild(div);
-      });
-    })
-    .catch(function(){});
+fetch('data/senales.json?_=' + Date.now())
+.then(function(r){ return r.ok ? r.json() : []; })
+.then(function(list){
+var box = document.getElementById('senales-list');
+if(!list || !list.length){ box.innerHTML = '<p class="empty">Aun no hay senales cargadas. Este apartado se alimenta manualmente en data/senales.json (no se hace scraping automatico de noticias).</p>'; return; }
+box.innerHTML = '';
+list.slice().reverse().forEach(function(item){
+var div = document.createElement('div');
+div.className = 'senal-item';
+div.innerHTML = '<div class="sdate">' + (item.date||'') + ' &middot; ' + (item.country||'') + ' &middot; ' + (item.category||'') + '</div>' +
+'<div>' + (item.title||'') + '</div>' +
+(item.source ? '<div><a href="'+item.source+'" target="_blank" rel="noopener">fuente</a></div>' : '');
+box.appendChild(div);
+});
+})
+.catch(function(){});
 }
 
 fetch('data/snapshot.json?_=' + Date.now())
-  .then(function(r){ return r.json(); })
-  .then(render)
-  .catch(function(err){
-    document.getElementById('foot').innerHTML = '<p style="color:#ff5c5c">No se pudo cargar data/snapshot.json todavia. Ejecuta el workflow "Actualizar datos economicos" en la pestana Actions para generarlo por primera vez.</p>';
-  });
+.then(function(r){ return r.json(); })
+.then(render)
+.catch(function(err){
+document.getElementById('foot').innerHTML = '<p style="color:#ff5c5c">No se pudo cargar data/snapshot.json todavia. Ejecuta el workflow "Actualizar datos economicos" en la pestana Actions para generarlo por primera vez.</p>';
+});
 loadSenales();
 })();
 </script>
