@@ -15,9 +15,21 @@ const SERIES = {
   }
 };
 
+function fetchWithTimeout(url, ms){
+  const controller = new AbortController();
+  const timer = setTimeout(function(){ controller.abort(); }, ms);
+  return fetch(url, {
+    signal: controller.signal,
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; PulsoCiudadanoBot/1.0; +https://github.com/zoetzerlpetrov-gif/PulsoCiudadano)',
+      'Accept': 'text/csv,*/*'
+    }
+  }).finally(function(){ clearTimeout(timer); });
+}
+
 async function fetchSeries(id){
   const url = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=' + id;
-  const res = await fetch(url);
+  const res = await fetchWithTimeout(url, 20000);
   if(!res.ok) throw new Error('HTTP ' + res.status + ' para ' + id);
   const text = await res.text();
   const lines = text.trim().split(String.fromCharCode(10)).slice(1);
@@ -39,10 +51,13 @@ async function main(){
     const keys = Object.keys(indicators);
     for(const key of keys){
       const meta = indicators[key];
+      console.log('Obteniendo ' + country + '/' + key + ' (' + meta.id + ')...');
       try{
         const points = await fetchSeries(meta.id);
+        console.log('  OK: ' + points.length + ' puntos, ultimo ' + (points[points.length-1] && points[points.length-1].date));
         out.series[country][key] = Object.assign({}, meta, { points: points });
       }catch(err){
+        console.log('  ERROR: ' + String((err && err.message) || err));
         out.series[country][key] = Object.assign({}, meta, { points: [], error: String((err && err.message) || err) });
       }
     }
