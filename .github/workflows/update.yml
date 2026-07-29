@@ -21,6 +21,9 @@ jobs:
           node-version: '22'
 
       - name: Obtener indicadores economicos
+        env:
+          BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
+          INEGI_TOKEN: ${{ secrets.INEGI_TOKEN }}
         run: node scripts/update.mjs
 
       - name: Commit y push si hay cambios
