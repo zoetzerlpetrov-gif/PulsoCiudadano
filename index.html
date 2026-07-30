@@ -47,7 +47,9 @@ header p{margin:0;color:var(--mute);font-size:13px;max-width:900px;line-height:1
 .delta.up{color:#06231a;background:var(--good);} .delta.down{color:#2a0d0d;background:var(--bad);} .delta.flat{color:#221a06;background:var(--warn);}
 .semaforo{width:10px;height:10px;border-radius:50%;margin-right:6px;display:inline-block;}
 .sem-good{background:var(--good);} .sem-warn{background:var(--warn);} .sem-bad{background:var(--bad);}
-canvas.spark{width:100%;height:46px;margin-top:8px;display:block;}
+.chart-block{margin-top:8px;}
+.chart-label{font-size:9px;color:var(--mute);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1px;}
+canvas.spark{width:100%;height:38px;display:block;}
 .meta{font-size:11px;color:var(--mute);margin-top:6px;display:flex;justify-content:space-between;gap:8px;}
 .foot{margin-top:30px;border-top:1px solid var(--line);padding-top:16px;font-size:12px;color:var(--mute);line-height:1.6;}
 .foot b{color:var(--txt);}
@@ -70,7 +72,7 @@ a{color:var(--us);}
 <body>
 <header>
 <h1>PULSO CIUDADANO // MX &middot; US &middot; UE</h1>
-<p>Indicadores publicos oficiales que reflejan el comportamiento economico de la poblacion (consumo, empleo, confianza, ahorro, remesas, informalidad) en Mexico, Estados Unidos y la Union Europea. No mide directamente cierres de negocios ni inseguridad: son senales macro que sirven como proxy. Actualizacion automatica periodica.</p>
+<p>Indicadores publicos oficiales que reflejan el comportamiento economico de la poblacion (consumo, empleo, confianza, ahorro, remesas, informalidad) en Mexico, Estados Unidos y la Union Europea. No mide directamente cierres de negocios ni inseguridad: son senales macro que sirven como proxy. Cada tarjeta muestra dos graficos: uno con el historico disponible (hasta 10 anios) y otro con la ventana reciente, ambos con su periodicidad indicada. Actualizacion automatica periodica.</p>
 </header>
 <div class="wrap">
 <div class="countries">
@@ -95,7 +97,7 @@ a{color:var(--us);}
 <div class="sector-grid" id="cards-SECTORS-MX"></div>
 <div class="subhead">ESTADOS UNIDOS &middot; Census (millones USD)</div>
 <div class="sector-grid" id="cards-SECTORS-US"></div>
-<div class="subhead">UNION EUROPEA &middot; Eurostat (% var. mensual)</div>
+<div class="subhead">UNION EUROPEA &middot; Eurostat (% var. mensual, mes vs. mes anterior)</div>
 <div class="sector-grid" id="cards-SECTORS-EU"></div>
 </div>
 
@@ -140,7 +142,8 @@ return v.toLocaleString('es-MX',{maximumFractionDigits:2});
 }
 
 function drawSpark(canvas, points, color){
-if(!points || points.length<2) return;
+if(!canvas) return;
+if(!points || points.length<2){ var ctx0 = canvas.getContext('2d'); ctx0.clearRect(0,0,canvas.width,canvas.height); return; }
 var ctx = canvas.getContext('2d');
 var w = canvas.width = canvas.clientWidth * 2;
 var h = canvas.height = canvas.clientHeight * 2;
@@ -169,6 +172,14 @@ if(cfg.dir==='down_is_good') return delta>0 ? 'sem-bad':'sem-good';
 return 'sem-warn';
 }
 
+function yearsSpan(pts){
+if(!pts || pts.length<2) return null;
+var d0 = new Date(pts[0].date);
+var d1 = new Date(pts[pts.length-1].date);
+var yrs = (d1-d0)/(365.25*24*3600*1000);
+return Math.max(1, Math.round(yrs));
+}
+
 function buildCard(key, s, accent){
 var pts = s.points || [];
 var last = pts[pts.length-1];
@@ -181,17 +192,24 @@ var deltaSign = (delta===null||delta===undefined||isNaN(delta)) ? '--' : ((delta
 var card = document.createElement('div');
 card.className = 'card';
 var semC = semClass(key, delta);
+var freqLabel = s.freq || 'periodicidad no especificada';
+var recentPts = pts.slice(-36);
+var span = yearsSpan(pts);
+var longLabel = 'Historico' + (span ? (' (' + span + (span===1?' ano, ':' anos, ') + freqLabel + ')') : ' (' + freqLabel + ')');
+var recentLabel = 'Reciente (' + freqLabel + ')';
 card.innerHTML =
 '<div class="top">' +
 '<div><span class="semaforo ' + semC + '"></span><span class="label">' + s.label + '</span><br>' +
 '<span class="value">' + fmtNum(lastVal) + '</span><span class="unit">' + (s.unit||'') + '</span></div>' +
 '<div class="delta ' + deltaClass + '">' + deltaSign + '</div>' +
 '</div>' +
-'<canvas class="spark"></canvas>' +
+'<div class="chart-block"><div class="chart-label">' + longLabel + '</div><canvas class="spark spark-long"></canvas></div>' +
+'<div class="chart-block"><div class="chart-label">' + recentLabel + '</div><canvas class="spark spark-recent"></canvas></div>' +
 '<div class="meta"><span>' + (s.source||'') + '</span><span>' + (last? last.date : '--') + '</span></div>' +
 (s.error ? '<div class="meta" style="color:#ff5c5c">Sin datos disponibles ('+s.error+')</div>' : '');
-var canvas = card.querySelector('canvas');
-setTimeout(function(){ drawSpark(canvas, pts, accent); }, 0);
+var longCanvas = card.querySelector('.spark-long');
+var recentCanvas = card.querySelector('.spark-recent');
+setTimeout(function(){ drawSpark(longCanvas, pts, accent); drawSpark(recentCanvas, recentPts, accent); }, 0);
 return card;
 }
 
@@ -200,8 +218,8 @@ var order = {
 MX: ['unemployment','retail_trade_growth','consumer_confidence','cpi','remittances','informal_employment'],
 US: ['unemployment','retail_sales_real','consumer_sentiment','cpi','savings_rate','debt_service_ratio','credit_delinquency','business_applications'],
 EU: ['unemployment','retail_trade_change','consumer_confidence','major_purchases_intent','savings_intent'],
-US_SECTORS: ['grocery','restaurants','general_merchandise','ecommerce','clothing','ecommerce_share'],
-MX_SECTORS: ['grocery','self_service','department_stores','clothing','furniture','fuel'],
+US_SECTORS: ['grocery','restaurants','general_merchandise','ecommerce','clothing','health_personal_care','ecommerce_share'],
+MX_SECTORS: ['grocery','self_service','department_stores','clothing','health','furniture','fuel'],
 EU_SECTORS: ['food','fuel','household_equipment','ict','other_goods','culture_recreation']
 };
 var accents = {MX:'#2fb8a6', US:'#5c8bff', EU:'#c99bff', US_SECTORS:'#ffb648', MX_SECTORS:'#2fb8a6', EU_SECTORS:'#c99bff'};
@@ -234,7 +252,7 @@ container.appendChild(buildCard(key, s, accents[group]));
 var foot = document.getElementById('foot');
 var gen = data.generated_at ? new Date(data.generated_at).toLocaleString('es-MX') : '--';
 foot.innerHTML =
-'<p><b>Metodologia:</b> los indicadores provienen de fuentes publicas oficiales: FRED (Banco de la Reserva Federal de San Luis, que agrega BLS, Census, Universidad de Michigan y OCDE), Eurostat (Comision Europea), Banxico (Sistema de Informacion Economica) e INEGI (Banco de Indicadores, ENOE, EMEC). Son indicadores MACRO usados como proxy del comportamiento economico ciudadano (consumo, empleo, confianza, ahorro, remesas, informalidad, ventas por sector); no miden directamente cierres de comercios, inseguridad o cobro de piso, ya que no existe una fuente publica abierta con esos datos en tiempo real.</p>' +
+'<p><b>Metodologia:</b> los indicadores provienen de fuentes publicas oficiales: FRED (Banco de la Reserva Federal de San Luis, que agrega BLS, Census, Universidad de Michigan y OCDE), Eurostat (Comision Europea), Banxico (Sistema de Informacion Economica) e INEGI (Banco de Indicadores, ENOE, EMEC). Son indicadores MACRO usados como proxy del comportamiento economico ciudadano (consumo, empleo, confianza, ahorro, remesas, informalidad, ventas por sector); no miden directamente cierres de comercios, inseguridad o cobro de piso, ya que no existe una fuente publica abierta con esos datos en tiempo real. Los porcentajes de variacion mensual comparan cada mes contra el mes inmediato anterior (no son variaciones anuales), salvo que se indique lo contrario.</p>' +
 '<p><b>Ultima actualizacion del panel:</b> ' + gen + '</p>';
 
 renderNews(data.news_signals || []);
