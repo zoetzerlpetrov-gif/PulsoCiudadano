@@ -8,6 +8,12 @@ Este panel busca ver el comportamiento economico de un pais desde el lado del ci
 
 La seccion "Senales de prensa (GDELT)" es un intento experimental de aproximarse a lo anterior usando volumen de cobertura noticiosa global (no scraping de sitios de noticias, sino la API publica del GDELT Project). Puede no devolver datos si el servicio limita las consultas; cuando eso pasa, el panel lo indica explicitamente en vez de mostrar datos falsos o inventados.
 
+## Periodicidad y graficos
+
+Cada indicador tiene una periodicidad propia segun su fuente (mensual o trimestral; se indica explicitamente en cada tarjeta). Los porcentajes de variacion (por ejemplo, en los sectores de la Union Europea) comparan cada periodo contra el periodo inmediato anterior (mes vs. mes anterior), no son variaciones anuales.
+
+Cada tarjeta muestra dos graficos de linea: uno con el historico disponible (hasta 10 anios, segun lo que publique la fuente) y otro con la ventana reciente (los ultimos puntos obtenidos). Ambos usan la misma escala de tiempo relativa a sus propios datos, no son comparables en pixeles entre indicadores.
+
 ## Indicadores incluidos
 
 ### Mexico
@@ -24,13 +30,13 @@ La seccion "Senales de prensa (GDELT)" es un intento experimental de aproximarse
 - Confianza del consumidor (FRED/Universidad de Michigan)
 - Inflacion al consumidor / CPI (FRED/BLS)
 - Tasa de ahorro personal (FRED/BEA)
-- Servicio de deuda de los hogares (FRED/Reserva Federal)
-- Morosidad en tarjetas de credito (FRED/Reserva Federal)
+- Servicio de deuda de los hogares (FRED/Reserva Federal) - trimestral
+- Morosidad en tarjetas de credito (FRED/Reserva Federal) - trimestral
 - Nuevas solicitudes de negocio (FRED/Census, Business Formation Statistics)
 
 ### Union Europea (27 paises)
 - Tasa de desempleo (Eurostat)
-- Variacion mensual de ventas al menudeo (Eurostat)
+- Variacion mensual de ventas al menudeo (Eurostat) - mes vs. mes anterior
 - Confianza del consumidor (Eurostat, indicador BS-CSMCI)
 - Intencion de grandes compras a 12 meses (Eurostat, BS-MP-NY)
 - Intencion de ahorro a 12 meses (Eurostat, BS-SV-NY)
@@ -39,16 +45,16 @@ La seccion "Senales de prensa (GDELT)" es un intento experimental de aproximarse
 
 Ademas de los indicadores macro, el panel desglosa las ventas/ingresos por giro comercial en cada region, para comparar visualmente contra los indicadores generales y detectar posibles correlaciones (por ejemplo, si el comercio electronico crece mientras las tiendas departamentales caen, o si el gasto en combustible se contrae en las tres regiones al mismo tiempo).
 
-**Mexico** (INEGI, Encuesta Mensual sobre Empresas Comerciales - EMEC, indice 2013=100, fuente directa): abarrotes y alimentos, tiendas de autoservicio, tiendas departamentales, ropa/bisuteria/accesorios, muebles para el hogar, combustibles/aceites/lubricantes.
+**Mexico** (INEGI, Encuesta Mensual sobre Empresas Comerciales - EMEC, indice 2013=100, fuente directa): abarrotes y alimentos, tiendas de autoservicio, tiendas departamentales, ropa/bisuteria/accesorios, salud y farmacia, muebles para el hogar, combustibles/aceites/lubricantes.
 
-**Estados Unidos** (FRED/Census, millones de USD): supermercados y tiendas de abarrotes, restaurantes y bares, tiendas departamentales, comercio electronico (nonstore), tiendas de ropa, y % de comercio electronico sobre el total.
+**Estados Unidos** (FRED/Census, millones de USD, mensual salvo donde se indique): supermercados y tiendas de abarrotes, restaurantes y bares, tiendas departamentales, comercio electronico (nonstore), tiendas de ropa, salud y cuidado personal, y % de comercio electronico sobre el total (trimestral).
 
-**Union Europea** (Eurostat, mismo dataset que ventas al menudeo pero desglosado por codigo NACE, % variacion mensual): alimentos/bebidas/tabaco, combustible para automotores, equipo para el hogar, equipo de informacion y comunicacion, otros bienes (ropa/calzado/farmacia), bienes culturales y de recreacion.
+**Union Europea** (Eurostat, mismo dataset que ventas al menudeo pero desglosado por codigo NACE, % variacion mensual): alimentos/bebidas/tabaco, combustible para automotores, equipo para el hogar, equipo de informacion y comunicacion, otros bienes (ropa/calzado/farmacia), bienes culturales y de recreacion. Nota: Eurostat no publica un desglose separado de farmacia a nivel EU27 (codigo NACE 47.73 sin datos agregados); ese gasto queda incluido dentro de "otros bienes".
 
 ## Arquitectura
 
 - `index.html`: front-end estatico (sin frameworks), lee `data/snapshot.json` y `data/senales.json`.
-- `scripts/update.mjs`: script Node que obtiene todas las series (FRED, Eurostat, Banxico, INEGI) y las senales de GDELT, y escribe `data/snapshot.json`.
+- `scripts/update.mjs`: script Node que obtiene todas las series (FRED, Eurostat, Banxico, INEGI) y las senales de GDELT, y escribe `data/snapshot.json`. Conserva hasta 10 anios de historico por indicador (limitado por lo que cada fuente realmente publique).
 - `.github/workflows/update.yml`: ejecuta el script cada 6 horas via GitHub Actions y commitea el snapshot si cambio. Usa los secrets `BANXICO_TOKEN` e `INEGI_TOKEN` (tokens gratuitos que cada quien genera en su propia cuenta; ver abajo).
 - `data/senales.json`: lista curada manualmente de senales cualitativas (no se genera automaticamente). Formato:
 
@@ -73,4 +79,4 @@ Los tokens se guardan como GitHub Secrets del repositorio (`BANXICO_TOKEN`, `INE
 - Agregar datos de turismo (DataTur/Sectur) para Cancun, Tulum, Playa del Carmen y Sayulita si se encuentra una fuente publica con series de tiempo.
 - Ampliar el panel a mas paises de la Union Europea de forma individual (hoy se muestra el agregado EU27).
 - Mejorar la confiabilidad de la integracion con GDELT (limites de tasa) o sustituirla por otra fuente de monitoreo de noticias.
-- Agregar mas giros comerciales por region (ej. salud/farmacia y vehiculos ya identificados en INEGI EMEC pero aun no incluidos) para ampliar la comparacion sectorial.
+- Agregar mas giros comerciales por region (ej. vehiculos, ya identificado en INEGI EMEC pero aun no incluido) para ampliar la comparacion sectorial.
