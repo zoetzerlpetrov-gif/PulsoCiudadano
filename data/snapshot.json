@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-01T19:19:53.693Z",
+  "generated_at": "2026-08-02T03:37:37.523Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -8,10 +8,6 @@
         "freq": "mensual",
         "source": "FRED (OCDE) - LRHUTTTTMXM156S",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 3.726757
-          },
           {
             "date": "2016-09-01",
             "value": 3.840897
@@ -489,10 +485,6 @@
         "source": "FRED (OCDE/INEGI) - MEXPRMNTO01GPSAM",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 0.620408267794947
-          },
-          {
             "date": "2016-09-01",
             "value": -0.183911950816107
           },
@@ -965,10 +957,6 @@
         "source": "FRED (OCDE) - CSCICP03MXM665S",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 96.89009
-          },
-          {
             "date": "2016-09-01",
             "value": 96.51229
           },
@@ -1328,10 +1316,6 @@
         "freq": "mensual",
         "source": "FRED (OCDE/INEGI) - MEXCPIALLMINMEI",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 102.4582
-          },
           {
             "date": "2016-09-01",
             "value": 103.0839
@@ -1720,10 +1704,6 @@
         "freq": "mensual",
         "source": "Banxico (SIE) - SE27803",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 2318.9361
-          },
           {
             "date": "2016-09-01",
             "value": 2441.427024
@@ -2355,10 +2335,6 @@
         "source": "INEGI (EMEC) - 720066",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 104.13351047
-          },
-          {
             "date": "2016-09-01",
             "value": 103.99813047
           },
@@ -2834,10 +2810,6 @@
         "freq": "mensual",
         "source": "INEGI (EMEC) - 720069",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 94.83631751
-          },
           {
             "date": "2016-09-01",
             "value": 88.17533169
@@ -3315,10 +3287,6 @@
         "source": "INEGI (EMEC) - 720070",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 84.16959789
-          },
-          {
             "date": "2016-09-01",
             "value": 75.61175761
           },
@@ -3794,10 +3762,6 @@
         "freq": "mensual",
         "source": "INEGI (EMEC) - 720073",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 90.3374223
-          },
           {
             "date": "2016-09-01",
             "value": 79.56760056
@@ -4275,10 +4239,6 @@
         "source": "INEGI (EMEC) - 720076",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 90.6213041
-          },
-          {
             "date": "2016-09-01",
             "value": 89.62742269
           },
@@ -4755,10 +4715,6 @@
         "source": "INEGI (EMEC) - 720083",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 91.16444364
-          },
-          {
             "date": "2016-09-01",
             "value": 88.4105699
           },
@@ -5234,10 +5190,6 @@
         "freq": "mensual",
         "source": "INEGI (EMEC) - 720093",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 117.02438432
-          },
           {
             "date": "2016-09-01",
             "value": 113.19477678
@@ -5717,10 +5669,6 @@
         "source": "FRED (BLS) - UNRATE",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 4.9
-          },
-          {
             "date": "2016-09-01",
             "value": 5
           },
@@ -6197,10 +6145,6 @@
         "source": "FRED (Census/BEA) - RRSFS",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 187053
-          },
-          {
             "date": "2016-09-01",
             "value": 187853
           },
@@ -6676,10 +6620,6 @@
         "freq": "mensual",
         "source": "FRED (Univ. Michigan) - UMCSENT",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 89.8
-          },
           {
             "date": "2016-09-01",
             "value": 91.2
@@ -7161,10 +7101,6 @@
         "source": "FRED (BLS) - CPIAUCSL",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 240.545
-          },
-          {
             "date": "2016-09-01",
             "value": 241.176
           },
@@ -7640,10 +7576,6 @@
         "freq": "mensual",
         "source": "FRED (BEA) - PSAVERT",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 5.1
-          },
           {
             "date": "2016-09-01",
             "value": 5.1
@@ -8445,10 +8377,6 @@
         "source": "FRED (Census/BFS) - BABATOTALSAUS",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 248039
-          },
-          {
             "date": "2016-09-01",
             "value": 255054
           },
@@ -8931,10 +8859,6 @@
         "source": "FRED (Census) - MRTSSM4451USS",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 51926
-          },
-          {
             "date": "2016-09-01",
             "value": 52284
           },
@@ -9410,10 +9334,6 @@
         "freq": "mensual",
         "source": "FRED (Census) - MRTSSM722USS",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 53653
-          },
           {
             "date": "2016-09-01",
             "value": 54259
@@ -9891,10 +9811,6 @@
         "source": "FRED (Census) - MRTSSM452USS",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 56701
-          },
-          {
             "date": "2016-09-01",
             "value": 56116
           },
@@ -10370,10 +10286,6 @@
         "freq": "mensual",
         "source": "FRED (Census) - MRTSSM454USS",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 43235
-          },
           {
             "date": "2016-09-01",
             "value": 43645
@@ -10851,10 +10763,6 @@
         "source": "FRED (Census) - MRTSSM448USS",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 21215
-          },
-          {
             "date": "2016-09-01",
             "value": 21347
           },
@@ -11330,10 +11238,6 @@
         "freq": "mensual",
         "source": "FRED (Census) - MRTSSM446USS",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 26147
-          },
           {
             "date": "2016-09-01",
             "value": 26166
@@ -11973,10 +11877,6 @@
         "source": "Eurostat - une_rt_m",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 9.1
-          },
-          {
             "date": "2016-09-01",
             "value": 9.1
           },
@@ -12457,10 +12357,6 @@
         "source": "Eurostat - sts_trtu_m",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 0.1
-          },
-          {
             "date": "2016-09-01",
             "value": -0.1
           },
@@ -12936,10 +12832,6 @@
         "freq": "mensual",
         "source": "Eurostat - ei_bsco_m (BS-CSMCI)",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": -6.9
-          },
           {
             "date": "2016-09-01",
             "value": -6.8
@@ -13425,10 +13317,6 @@
         "source": "Eurostat - ei_bsco_m (BS-MP-NY)",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": -14.6
-          },
-          {
             "date": "2016-09-01",
             "value": -15.4
           },
@@ -13912,10 +13800,6 @@
         "freq": "mensual",
         "source": "Eurostat - ei_bsco_m (BS-SV-NY)",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": -2.6
-          },
           {
             "date": "2016-09-01",
             "value": -2.7
@@ -14403,10 +14287,6 @@
         "source": "Eurostat - sts_trtu_m (G4711)",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 0.2
-          },
-          {
             "date": "2016-09-01",
             "value": 0.7
           },
@@ -14882,10 +14762,6 @@
         "freq": "mensual",
         "source": "Eurostat - sts_trtu_m (G473)",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 0
-          },
           {
             "date": "2016-09-01",
             "value": -0.2
@@ -15363,10 +15239,6 @@
         "source": "Eurostat - sts_trtu_m (G475)",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 0.5
-          },
-          {
             "date": "2016-09-01",
             "value": -1.2
           },
@@ -15842,10 +15714,6 @@
         "freq": "mensual",
         "source": "Eurostat - sts_trtu_m (G474)",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 0.4
-          },
           {
             "date": "2016-09-01",
             "value": -0.9
@@ -16323,10 +16191,6 @@
         "source": "Eurostat - sts_trtu_m (G477)",
         "points": [
           {
-            "date": "2016-08-01",
-            "value": 0.3
-          },
-          {
             "date": "2016-09-01",
             "value": -1.5
           },
@@ -16802,10 +16666,6 @@
         "freq": "mensual",
         "source": "Eurostat - sts_trtu_m (G476)",
         "points": [
-          {
-            "date": "2016-08-01",
-            "value": 0.5
-          },
           {
             "date": "2016-09-01",
             "value": 0.6
@@ -17284,16 +17144,14 @@
       "country": "Mexico",
       "label": "Menciones de cierre de negocios (MX)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     },
     {
       "key": "us_closures",
       "country": "Estados Unidos",
       "label": "Menciones de cierre de tiendas (US)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     }
   ]
 }
