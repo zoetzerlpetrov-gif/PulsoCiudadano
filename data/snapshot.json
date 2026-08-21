@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T06:57:55.873Z",
+  "generated_at": "2026-08-21T13:01:17.169Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -2813,6 +2813,10 @@
           {
             "date": "2026-05-01",
             "value": 102.60427701
+          },
+          {
+            "date": "2026-06-01",
+            "value": 103.55068756
           }
         ]
       },
@@ -3289,6 +3293,10 @@
           {
             "date": "2026-05-01",
             "value": 131.18984585
+          },
+          {
+            "date": "2026-06-01",
+            "value": 121.89181027
           }
         ]
       },
@@ -3765,6 +3773,10 @@
           {
             "date": "2026-05-01",
             "value": 138.07961674
+          },
+          {
+            "date": "2026-06-01",
+            "value": 113.58800305
           }
         ]
       },
@@ -4241,6 +4253,10 @@
           {
             "date": "2026-05-01",
             "value": 149.964645
+          },
+          {
+            "date": "2026-06-01",
+            "value": 138.17121386
           }
         ]
       },
@@ -4717,6 +4733,10 @@
           {
             "date": "2026-05-01",
             "value": 140.17064877
+          },
+          {
+            "date": "2026-06-01",
+            "value": 135.6390791
           }
         ]
       },
@@ -5193,6 +5213,10 @@
           {
             "date": "2026-05-01",
             "value": 202.64578747
+          },
+          {
+            "date": "2026-06-01",
+            "value": 184.16009002
           }
         ]
       },
@@ -5669,6 +5693,10 @@
           {
             "date": "2026-05-01",
             "value": 121.48799385
+          },
+          {
+            "date": "2026-06-01",
+            "value": 114.73218221
           }
         ]
       }
@@ -17224,14 +17252,16 @@
       "country": "Mexico",
       "label": "Menciones de cierre de negocios (MX)",
       "points": [],
-      "available": false
+      "available": false,
+      "error": "fetch failed"
     },
     {
       "key": "us_closures",
       "country": "Estados Unidos",
       "label": "Menciones de cierre de tiendas (US)",
       "points": [],
-      "available": false
+      "available": false,
+      "error": "fetch failed"
     }
   ]
 }
