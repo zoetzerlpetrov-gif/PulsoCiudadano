@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T18:39:26.406Z",
+  "generated_at": "2026-08-23T01:50:14.698Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -17252,15 +17252,15 @@
       "country": "Mexico",
       "label": "Menciones de cierre de negocios (MX)",
       "points": [],
-      "available": false,
-      "error": "This operation was aborted"
+      "available": false
     },
     {
       "key": "us_closures",
       "country": "Estados Unidos",
       "label": "Menciones de cierre de tiendas (US)",
       "points": [],
-      "available": false
+      "available": false,
+      "error": "fetch failed"
     }
   ]
 }
