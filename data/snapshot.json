@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-11T11:03:28.590Z",
+  "generated_at": "2026-09-11T16:19:26.085Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -7571,6 +7571,10 @@
           {
             "date": "2026-07-01",
             "value": 332.813
+          },
+          {
+            "date": "2026-08-01",
+            "value": 334.131
           }
         ]
       },
@@ -8806,11 +8810,11 @@
           },
           {
             "date": "2025-07-01",
-            "value": 469274
+            "value": 467687
           },
           {
             "date": "2025-08-01",
-            "value": 478074
+            "value": 477409
           },
           {
             "date": "2025-09-01",
@@ -8850,11 +8854,15 @@
           },
           {
             "date": "2026-06-01",
-            "value": 535690
+            "value": 533453
           },
           {
             "date": "2026-07-01",
-            "value": 578926
+            "value": 576512
+          },
+          {
+            "date": "2026-08-01",
+            "value": 531728
           }
         ]
       }
@@ -17184,8 +17192,7 @@
       "country": "Mexico",
       "label": "Menciones de cierre de negocios (MX)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     },
     {
       "key": "us_closures",
