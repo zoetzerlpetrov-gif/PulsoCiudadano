@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T05:29:50.968Z",
+  "generated_at": "2026-10-01T12:57:10.862Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -12046,7 +12046,7 @@
           },
           {
             "date": "2018-04-01",
-            "value": 7.5
+            "value": 7.6
           },
           {
             "date": "2018-05-01",
@@ -12090,7 +12090,7 @@
           },
           {
             "date": "2019-03-01",
-            "value": 6.9
+            "value": 7
           },
           {
             "date": "2019-04-01",
@@ -12106,7 +12106,7 @@
           },
           {
             "date": "2019-07-01",
-            "value": 6.7
+            "value": 6.8
           },
           {
             "date": "2019-08-01",
@@ -12222,7 +12222,7 @@
           },
           {
             "date": "2021-12-01",
-            "value": 6.4
+            "value": 6.5
           },
           {
             "date": "2022-01-01",
@@ -12302,7 +12302,7 @@
           },
           {
             "date": "2023-08-01",
-            "value": 6
+            "value": 6.1
           },
           {
             "date": "2023-09-01",
@@ -12382,7 +12382,7 @@
           },
           {
             "date": "2025-04-01",
-            "value": 5.9
+            "value": 6
           },
           {
             "date": "2025-05-01",
@@ -12442,6 +12442,10 @@
           },
           {
             "date": "2026-07-01",
+            "value": 6.1
+          },
+          {
+            "date": "2026-08-01",
             "value": 6.1
           }
         ]
@@ -17280,16 +17284,14 @@
       "country": "Mexico",
       "label": "Menciones de cierre de negocios (MX)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     },
     {
       "key": "us_closures",
       "country": "Estados Unidos",
       "label": "Menciones de cierre de tiendas (US)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     }
   ]
 }
