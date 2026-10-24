@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T04:16:28.323Z",
+  "generated_at": "2026-10-24T10:43:40.795Z",
   "series": {
     "MX": {
       "unemployment": {
@@ -17251,8 +17251,7 @@
       "country": "Estados Unidos",
       "label": "Menciones de cierre de tiendas (US)",
       "points": [],
-      "available": false,
-      "error": "fetch failed"
+      "available": false
     }
   ]
 }
